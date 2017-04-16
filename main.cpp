@@ -5,7 +5,7 @@
 #include "gcd.h"
 #include "amino_acids.h"
 
-using namespace std; 
+using namespace std;
 
 void test_prime_factors(){
 	//	Finding the prime factors of a number
