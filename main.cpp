@@ -77,10 +77,12 @@ void test_all(){
 int main() {
 //	test_all();
 	init_AA_frequency();
+	
 	double sum = 0;
 	for (std::map<AA, double>::iterator it = AA_frequency.begin(); it != AA_frequency.end(); ++it){
 		sum += it->second;
 	}
 	cout << sum;
+
 	return 0;
 }
