@@ -3,7 +3,7 @@
 #include "primes.h"
 #include "lcs.h"
 #include "gcd.h"
-#include "amino_acids.h"
+#include "amino_acid_properties.h"
 
 using namespace std;
 
@@ -77,9 +77,9 @@ void test_all(){
 int main() {
 //	test_all();
 	init_AA_frequency();
-	
+
 	double sum = 0;
-	for (std::map<AA, double>::iterator it = AA_frequency.begin(); it != AA_frequency.end(); ++it){
+	for (std::map<AA_types, double>::iterator it = AA_frequency.begin(); it != AA_frequency.end(); ++it){
 		sum += it->second;
 	}
 	cout << sum;
