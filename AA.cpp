@@ -25,12 +25,3 @@ void AA::set_phi(int phi) {
 void AA::set_psi(int psi) {
 	this->psi = psi;
 }
-
-
-
-
-
-
-
-
-
