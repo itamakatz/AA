@@ -6,6 +6,7 @@
 #define PROTEIN_MATCHING_AA_H
 
 #include "amino_acid_properties.h"
+#include <string>
 
 class AA{
 private:
@@ -13,8 +14,13 @@ private:
 	int phi;
 	int psi;
 
+	AA(){}
 public:
-	AA();
+	AA(std::string aa_str);
+	AA(std::string aa_str, int phi, int psi);
+	void set_AA(AA_types aa);
+	void set_phi(int phi);
+	void set_psi(int psi);
 };
 
 

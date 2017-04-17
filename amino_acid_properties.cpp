@@ -4,6 +4,13 @@ std::map<AA_types, double> AA_frequency;
 
 std::map<AA_types, unsigned long int> AA_to_primes;
 
+std::map<std::string, AA_types> AA_string_to_enum;
+
+void init_AA_properties_all(){
+	init_AA_frequency();
+	set_AA_to_prime();
+}
+
 void init_AA_frequency(){
 	AA_frequency.insert(std::pair<AA_types, double>(A, 7.4));
 	AA_frequency.insert(std::pair<AA_types, double>(R, 4.2));
@@ -40,6 +47,30 @@ void set_AA_to_prime(){
 	for (std::map<double, AA_types>::iterator it = AA_frequency_reversed.begin(); it != AA_frequency_reversed.end(); ++it, ++prime_it){
 		AA_to_primes.insert(std::pair<AA_types, unsigned long int>(it->second, *prime_it));
 	}
+}
+
+void init_AA_string_to_enum(){
+
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("A", A));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("R", R));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("N", N));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("D", D));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("C", C));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("E", E));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("Q", Q));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("G", G));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("H", H));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("I", I));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("L", L));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("K", K));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("M", M));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("F", F));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("P", P));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("S", S));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("T", T));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("W", W));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("Y", Y));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("V", V));
 }
 
 //{{Alanine, Ala, A},

@@ -4,6 +4,9 @@
 #include "lcs.h"
 #include "gcd.h"
 #include "amino_acid_properties.h"
+#include "CSV.h"
+#include "Protein.h"
+
 
 using namespace std;
 
@@ -75,14 +78,40 @@ void test_all(){
 }
 
 int main() {
-//	test_all();
-	init_AA_frequency();
 
-	double sum = 0;
-	for (std::map<AA_types, double>::iterator it = AA_frequency.begin(); it != AA_frequency.end(); ++it){
-		sum += it->second;
+//	test_all();
+
+	init_AA_properties_all();
+
+	std::vector<Protein> all_Proteins;
+
+	std::ifstream file("plop.csv");
+
+	CSVRow row;
+	while(file >> row) {
+
+//		read the line containing the AA chain
+		std::vector<std::string> protein_AA_data(row.m_data);
+
+		file >> row;
+//		read the line containing the angles of each AA
+		std::vector<std::string> protein_angles_data(row.m_data);
+
+//		inserting the chain data into a new Protein
+		Protein new_Protein;
+
+		std::vector<std::string>::iterator angles_it = protein_angles_data.begin();
+
+//		ASSUMING PSI IS ON THE LEFT AND PHI ON THE RIGHT OF AN AA
+		for (std::vector<std::string>::iterator AA_it = protein_AA_data.begin(); AA_it != protein_AA_data.end(); ++AA_it, ++angles_it){
+			int psi = std::stoi(*angles_it);
+			++angles_it;
+			int phi = std::stoi(*angles_it);
+			new_Protein.add_AA(AA(*AA_it ,phi, psi));
+		}
+
+//		std::cout << "4th Element(" << row[3] << ")\n";
 	}
-	cout << sum;
 
 	return 0;
 }

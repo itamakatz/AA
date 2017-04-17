@@ -15,7 +15,7 @@ private:
 	std::vector<unsigned long int> psi_AA;
 
 public:
-	Protein();
+	void add_AA(AA new_AA);
 };
 
 
