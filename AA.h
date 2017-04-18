@@ -8,7 +8,7 @@
 #include "amino_acid_properties.h"
 #include <string>
 
-class AA{
+class AA {
 private:
 	AA_types aa;
 	int phi;

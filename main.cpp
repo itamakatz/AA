@@ -1,4 +1,6 @@
+#include <string>
 #include <iostream>
+#include <sstream>
 
 #include "primes.h"
 #include "lcs.h"
@@ -7,8 +9,9 @@
 #include "CSV.h"
 #include "Protein.h"
 
-
 using namespace std;
+
+string protein_database_file = "plop.csv";
 
 void test_prime_factors(){
 	//	Finding the prime factors of a number
@@ -77,15 +80,10 @@ void test_all(){
 	test_lcs();
 }
 
-int main() {
+std::vector<Protein> create_protein_database(string file_name){
+	std::vector<Protein> Proteins_vector;
 
-//	test_all();
-
-	init_AA_properties_all();
-
-	std::vector<Protein> all_Proteins;
-
-	std::ifstream file("plop.csv");
+	std::ifstream file(file_name);
 
 	CSVRow row;
 	while(file >> row) {
@@ -110,8 +108,34 @@ int main() {
 			new_Protein.add_AA(AA(*AA_it ,phi, psi));
 		}
 
-//		std::cout << "4th Element(" << row[3] << ")\n";
+		Proteins_vector.push_back(new_Protein);
 	}
+
+	return Proteins_vector;
+}
+
+string get_user_protein(){
+	string input_prtotein_file = "";
+
+	// How to get a string/sentence with spaces
+	cout << "Please enter a valid sentence (with spaces):\n>";
+	getline(cin, input_prtotein_file);
+	cout << "You entered: " << input_prtotein_file << endl << endl;
+
+	return input_prtotein_file;
+}
+
+int main() {
+
+//	test_all();
+
+	init_AA_properties_all();
+
+	std::vector<Protein> all_Proteins = create_protein_database(protein_database_file);
+
+	string input_protein_file = get_user_protein();
+
+	Protein input_Protein = create_protein_database(input_protein_file).at(0);
 
 	return 0;
 }

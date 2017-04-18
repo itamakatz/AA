@@ -15,8 +15,7 @@
 #include <vector>
 #include <string>
 
-class CSVRow
-{
+class CSVRow {
 public:
 	std::vector<std::string> m_data;
 
@@ -36,21 +35,19 @@ public:
 		std::string cell;
 
 		m_data.clear();
-		while(std::getline(lineStream, cell, ','))
-		{
+		while(std::getline(lineStream, cell, ',')) {
 			m_data.push_back(cell);
 		}
+
 		// This checks for a trailing comma with no data after it.
-		if (!lineStream && cell.empty())
-		{
+		if (!lineStream && cell.empty()) {
 			// If there was a trailing comma then add an empty element.
 			m_data.push_back("");
 		}
 	}
 };
 
-std::istream& operator>>(std::istream& str, CSVRow& data)
-{
+std::istream& operator>>(std::istream& str, CSVRow& data) {
 	data.readNextRow(str);
 	return str;
 }
