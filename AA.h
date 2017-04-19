@@ -7,6 +7,7 @@
 
 #include "amino_acid_properties.h"
 #include <string>
+#include <iostream>
 
 class AA {
 private:
@@ -16,8 +17,8 @@ private:
 
 	AA(){}
 public:
-	AA(std::string aa_str);
-	AA(std::string aa_str, int phi, int psi);
+	AA(const std::string &aa_str);
+	AA(const std::string &aa_str, int phi, int psi);
 	void set_AA(AA_types aa);
 	void set_phi(int phi);
 	void set_psi(int psi);

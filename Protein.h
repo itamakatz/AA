@@ -2,11 +2,13 @@
 #define PROTEIN_MATCHING_PROTEIN_H
 
 #include <vector>
+#include <string>
 #include "AA.h"
 
 class Protein {
 private:
 
+	std::string protein_ID;
 	std::vector<AA> AA_chain;
 
 	std::vector<unsigned long int> phi_angles;
@@ -14,7 +16,10 @@ private:
 	std::vector<unsigned long int> psi_angles;
 	std::vector<unsigned long int> psi_AA;
 
+	Protein(){}
+
 public:
+	Protein(std::string protein_ID);
 	void add_AA(AA new_AA);
 };
 

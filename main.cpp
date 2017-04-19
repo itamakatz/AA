@@ -11,7 +11,9 @@
 
 using namespace std;
 
-string protein_database_file = "plop.csv";
+int count_proteins = 0;
+
+string protein_database_file = "/home/itamar/Documents/AA/Files/database_itamar.txt";
 
 void test_prime_factors(){
 	//	Finding the prime factors of a number
@@ -81,37 +83,84 @@ void test_all(){
 }
 
 std::vector<Protein> create_protein_database(string file_name){
-	std::vector<Protein> Proteins_vector;
+	std::vector<Protein> proteins_vector;
 
 	std::ifstream file(file_name);
 
 	CSVRow row;
 	while(file >> row) {
+		count_proteins++;
+		/**** PARSERING A SINGLE PROTEINS DATA ****/
+
+//		read the line containing the Proteins ID
+		std::string protein_ID(row.get_m_data().at(0));
+
+		file >> row;
+		if(row.get_m_data().at(0) == "") {
+			while (true) {
+
+				//		    if the protein has no data, ignore it. TODO NEED TO CHECK WHAT EXACTLY TO DO
+				while (row.get_m_data().at(0) == "") {
+					file >> row;
+				}
+
+				//			check whether this new protein has data
+				protein_ID = row.get_m_data().at(0);
+				file >> row;
+				if (row.get_m_data().at(0) != "") {
+					break;
+				}
+			}
+		}
 
 //		read the line containing the AA chain
-		std::vector<std::string> protein_AA_data(row.m_data);
+		std::vector<std::string> protein_AA_sequence(row.get_m_data());
+		protein_AA_sequence.pop_back();
 
 		file >> row;
 //		read the line containing the angles of each AA
-		std::vector<std::string> protein_angles_data(row.m_data);
+		std::vector<std::string> protein_PHI_sequence(row.get_m_data());
+		protein_PHI_sequence.pop_back();
 
-//		inserting the chain data into a new Protein
-		Protein new_Protein;
+		file >> row;
+//		read the line containing the angles of each AA
+		std::vector<std::string> protein_PSI_sequence(row.get_m_data());
+		protein_PSI_sequence.pop_back();
 
-		std::vector<std::string>::iterator angles_it = protein_angles_data.begin();
+		/**** ADDING THE PROTEINS DATA TO THE PROTEINS VECTOR ****/
 
-//		ASSUMING PSI IS ON THE LEFT AND PHI ON THE RIGHT OF AN AA
-		for (std::vector<std::string>::iterator AA_it = protein_AA_data.begin(); AA_it != protein_AA_data.end(); ++AA_it, ++angles_it){
-			int psi = std::stoi(*angles_it);
-			++angles_it;
-			int phi = std::stoi(*angles_it);
-			new_Protein.add_AA(AA(*AA_it ,phi, psi));
+		Protein new_Protein(protein_ID);
+
+		std::vector<std::string>::iterator phi_it = protein_PHI_sequence.begin();
+		std::vector<std::string>::iterator psi_it = protein_PSI_sequence.begin();
+
+		for (std::vector<std::string>::iterator AA_it = protein_AA_sequence.begin(); AA_it != protein_AA_sequence.end();
+		     ++AA_it, ++phi_it, ++psi_it){
+
+			int phi;
+			int psi;
+
+//			for debugging purposes i define here the current AA
+			string current_AA(*AA_it);
+
+			try {
+				phi = std::stoi(*phi_it);
+				psi = std::stoi(*psi_it);
+			}catch (exception e){
+				cout << e.what() << endl;
+			}
+
+			try {
+				new_Protein.add_AA(AA(*AA_it ,phi, psi));
+			}catch (std::exception e){
+				std::cout << e.what() << std::endl;
+			}
 		}
 
-		Proteins_vector.push_back(new_Protein);
+		proteins_vector.push_back(new_Protein);
 	}
 
-	return Proteins_vector;
+	return proteins_vector;
 }
 
 string get_user_protein(){

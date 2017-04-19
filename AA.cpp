@@ -4,11 +4,11 @@
 
 #include "AA.h"
 
-AA::AA(std::string aa_str) {
+AA::AA(const std::string &aa_str) {
 	this->aa = AA_string_to_enum.at(aa_str);
 }
 
-AA::AA(std::string aa_str, int phi, int psi) {
+AA::AA(const std::string &aa_str, int phi, int psi) {
 	this->aa = AA_string_to_enum.at(aa_str);
 	this->phi = phi;
 	this->psi = psi;

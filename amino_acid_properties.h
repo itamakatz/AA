@@ -25,7 +25,8 @@ enum AA_types {
 	T,
 	W,
 	Y,
-	V};
+	V,
+	OTHER};
 
 extern std::map<AA_types, double> AA_frequency;
 
