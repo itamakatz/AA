@@ -6,6 +6,8 @@ std::map<AA_types, unsigned long int> AA_to_primes;
 
 std::map<std::string, AA_types> AA_string_to_enum;
 
+std::set<std::string> illegal_AA = {"!"};
+
 void init_AA_properties_all(){
 	init_AA_frequency();
 	set_AA_to_prime();
@@ -34,7 +36,7 @@ void init_AA_frequency(){
 	AA_frequency.insert(std::pair<AA_types, double>(Y, 3.3));
 	AA_frequency.insert(std::pair<AA_types, double>(V, 6.8));
 
-	AA_frequency.insert(std::pair<AA_types, double>(OTHER, 0));
+	AA_frequency.insert(std::pair<AA_types, double>(WILD_CARD, 0));
 }
 
 void set_AA_to_prime(){
@@ -81,45 +83,15 @@ void init_AA_string_to_enum(){
 	AA_string_to_enum.insert(std::pair<std::string, AA_types>("Y", Y));
 	AA_string_to_enum.insert(std::pair<std::string, AA_types>("V", V));
 
-	// lower case AA
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("a", A));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("r", R));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("n", N));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("d", D));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("c", C));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("e", E));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("q", Q));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("g", G));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("h", H));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("i", I));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("l", L));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("k", K));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("m", M));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("f", F));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("p", P));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("s", S));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("t", T));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("w", W));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("y", Y));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("v", V));
+	// special case of aspartate and glutamate (B is like D and Q is like E)
 
-	// special cases of aspartate and glutamate (B is like D and Q is like E)
-
-	//	higher case
 	AA_string_to_enum.insert(std::pair<std::string, AA_types>("B", D));
 	AA_string_to_enum.insert(std::pair<std::string, AA_types>("Q", E));
 
-	//	lower case
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("b", D));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("q", E));
+	// special case where X is a wild card AA (can match to any AA)
 
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("j", OTHER));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("x", OTHER));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("X", OTHER));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("z", OTHER));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("o", OTHER));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("u", OTHER));
-	AA_string_to_enum.insert(std::pair<std::string, AA_types>("!", OTHER));
+	AA_string_to_enum.insert(std::pair<std::string, AA_types>("X", WILD_CARD));
+
 }
 
 //{{Alanine, Ala, A},

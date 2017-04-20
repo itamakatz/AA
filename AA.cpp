@@ -9,19 +9,29 @@ AA::AA(const std::string &aa_str) {
 }
 
 AA::AA(const std::string &aa_str, int phi, int psi) {
-	this->aa = AA_string_to_enum.at(aa_str);
+	if((bool)std::islower(aa_str.at(0))){
+		this->aa = AA_types::C;
+		_contains_disulfide = true;
+		_disulfide_id = aa_str;
+	}else {
+		this->aa = AA_string_to_enum.at(aa_str);
+	}
+
 	this->phi = phi;
 	this->psi = psi;
 }
 
-void AA::set_AA(AA_types aa) {
-	this->aa = aa;
+bool AA::check_AA_valid(const std::string &AA_str) {
+	if(illegal_AA.find(AA_str) != illegal_AA.end()){
+		return false;
+	}
+	else if(AA_str.length() != 1){
+		return false;
+	}
+	return true;
 }
 
-void AA::set_phi(int phi) {
-	this->phi = phi;
+bool AA::contains_disulfide() {
+	return _contains_disulfide;
 }
 
-void AA::set_psi(int psi) {
-	this->psi = psi;
-}

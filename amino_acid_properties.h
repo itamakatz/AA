@@ -3,6 +3,7 @@
 
 #include "primes.h"
 #include <map>
+#include <set>
 #include <string>
 
 enum AA_types {
@@ -26,7 +27,9 @@ enum AA_types {
 	W,
 	Y,
 	V,
-	OTHER};
+	WILD_CARD /* can be paird with any AA */};
+
+extern std::set<std::string> illegal_AA;
 
 extern std::map<AA_types, double> AA_frequency;
 

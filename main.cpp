@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-
+#include <boost/optional.hpp>
 #include "primes.h"
 #include "lcs.h"
 #include "gcd.h"
@@ -11,9 +11,11 @@
 
 using namespace std;
 
-int count_proteins = 0;
+int g_count_proteins = 0;
 
-string protein_database_file = "/home/itamar/Documents/AA/Files/database_itamar.txt";
+string g_protein_database_file = "/home/itamar/Documents/AA/Files/database_itamar.txt";
+
+bool g_EXIT_PROGRAM = false;
 
 void test_prime_factors(){
 	//	Finding the prime factors of a number
@@ -82,18 +84,18 @@ void test_all(){
 	test_lcs();
 }
 
-std::vector<Protein> create_protein_database(string file_name){
+std::vector<Protein> create_protein_database(std::ifstream &file){
 	std::vector<Protein> proteins_vector;
-
-	std::ifstream file(file_name);
 
 	CSVRow row;
 	while(file >> row) {
-		count_proteins++;
+		g_count_proteins++;
 		/**** PARSERING A SINGLE PROTEINS DATA ****/
 
 //		read the line containing the Proteins ID
-		std::string protein_ID(row.get_m_data().at(0));
+//		std::string protein_ID(row.get_m_data().at(0)); SOME BUG IN CLION
+		std::string protein_ID;
+		protein_ID = row.get_m_data().at(0);
 
 		file >> row;
 		if(row.get_m_data().at(0) == "") {
@@ -141,7 +143,7 @@ std::vector<Protein> create_protein_database(string file_name){
 			int psi;
 
 //			for debugging purposes i define here the current AA
-			string current_AA(*AA_it);
+			string current_AA_str(*AA_it);
 
 			try {
 				phi = std::stoi(*phi_it);
@@ -150,10 +152,12 @@ std::vector<Protein> create_protein_database(string file_name){
 				cout << e.what() << endl;
 			}
 
-			try {
-				new_Protein.add_AA(AA(*AA_it ,phi, psi));
-			}catch (std::exception e){
-				std::cout << e.what() << std::endl;
+			if(AA::check_AA_valid(current_AA_str)){
+				try {
+					new_Protein.add_AA(AA(current_AA_str ,phi, psi));
+				} catch (std::exception e) {
+					std::cout << e.what() << std::endl;
+				}
 			}
 		}
 
@@ -163,15 +167,46 @@ std::vector<Protein> create_protein_database(string file_name){
 	return proteins_vector;
 }
 
-string get_user_protein(){
-	string input_prtotein_file = "";
+boost::optional<std::ifstream> get_user_protein(){
+//std::ifstream get_user_protein(){
+	string input_file_str = "";
 
-	// How to get a string/sentence with spaces
-	cout << "Please enter a valid sentence (with spaces):\n>";
-	getline(cin, input_prtotein_file);
-	cout << "You entered: " << input_prtotein_file << endl << endl;
+	cout << "Please enter an absolute PATH or EXIT to exit the program:\n>";
+	getline(cin, input_file_str);
 
-	return input_prtotein_file;
+	if(input_file_str.compare("ABORT")){
+		return boost::optional<std::ifstream>{};
+//		return nullptr;
+	}
+
+	boost::optional<std::ifstream> file;
+//	std::ifstream file;
+
+	while(true){
+
+		try{
+
+			(*file).open(input_file_str, std::ifstream::in);
+
+		}catch(exception e) {
+
+			cout << "You did not enter a correct path. Please try again." << endl << endl;
+
+			cout << "Please enter an absolute PATH or EXIT to exit the program:\n>";
+			getline(cin, input_file_str);
+
+			if(input_file_str.compare("ABORT")){
+				return boost::optional<std::ifstream>{};
+//				return nullptr;
+			}
+			continue;
+		}
+		break;
+	}
+
+	cout << "You entered: " << input_file_str << endl << endl;
+
+	return file;
 }
 
 int main() {
@@ -180,11 +215,31 @@ int main() {
 
 	init_AA_properties_all();
 
-	std::vector<Protein> all_Proteins = create_protein_database(protein_database_file);
+	boost::optional<std::ifstream> file;
+//	std::ifstream file;
 
-	string input_protein_file = get_user_protein();
+	try{
 
-	Protein input_Protein = create_protein_database(input_protein_file).at(0);
+		(*file).open(g_protein_database_file, std::ifstream::in);
 
+	}catch(exception e) {
+
+		cout << "The PATH to the database is incorrect." << endl << endl;
+		return -1;
+	}
+
+	std::vector<Protein> all_Proteins = create_protein_database(*file);
+
+	(*file).close();
+
+	while(true) {
+		file = get_user_protein();
+
+		if(file){
+			break;
+		}
+
+		Protein input_Protein = create_protein_database(*file).at(0);
+	}
 	return 0;
 }
