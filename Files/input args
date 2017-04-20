@@ -1,6 +1,8 @@
 Protein Database: /home/itamar/Documents/AA/Files/database_itamar.txt
 
-User Protein Input: /home/itamar/Documents/AA/Files/input_protein.txt
+Posible User Protein Inputs:
+/home/itamar/Documents/AA/Files/input_protein.txt
+/home/itamar/Documents/AA/Files/input_protein_with_disulfide_bouns.txt
 
 Notes:
 

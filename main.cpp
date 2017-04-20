@@ -168,25 +168,22 @@ std::vector<Protein> create_protein_database(std::ifstream &file){
 }
 
 boost::optional<std::ifstream> get_user_protein(){
-//std::ifstream get_user_protein(){
 	string input_file_str = "";
 
 	cout << "Please enter an absolute PATH or EXIT to exit the program:\n>";
 	getline(cin, input_file_str);
 
-	if(input_file_str.compare("ABORT")){
+	if(!input_file_str.compare("EXIT")){
 		return boost::optional<std::ifstream>{};
-//		return nullptr;
 	}
 
-	boost::optional<std::ifstream> file;
-//	std::ifstream file;
+	std::ifstream file;
 
 	while(true){
 
 		try{
 
-			(*file).open(input_file_str, std::ifstream::in);
+			file.open(input_file_str, std::ifstream::in);
 
 		}catch(exception e) {
 
@@ -195,9 +192,8 @@ boost::optional<std::ifstream> get_user_protein(){
 			cout << "Please enter an absolute PATH or EXIT to exit the program:\n>";
 			getline(cin, input_file_str);
 
-			if(input_file_str.compare("ABORT")){
+			if(!input_file_str.compare("EXIT")){
 				return boost::optional<std::ifstream>{};
-//				return nullptr;
 			}
 			continue;
 		}
@@ -215,31 +211,33 @@ int main() {
 
 	init_AA_properties_all();
 
-	boost::optional<std::ifstream> file;
-//	std::ifstream file;
+	std::ifstream file;
 
 	try{
 
-		(*file).open(g_protein_database_file, std::ifstream::in);
+		file.open(g_protein_database_file, std::ifstream::in);
 
 	}catch(exception e) {
 
-		cout << "The PATH to the database is incorrect." << endl << endl;
+		cout << "The PATH to the database is incorrect. Fix and recompile." << endl << endl;
 		return -1;
 	}
 
-	std::vector<Protein> all_Proteins = create_protein_database(*file);
+	std::vector<Protein> all_Proteins = create_protein_database(file);
 
-	(*file).close();
+	file.close();
 
 	while(true) {
-		file = get_user_protein();
+		boost::optional<std::ifstream> input_file = get_user_protein();
 
-		if(file){
+		if(!input_file.is_initialized()){
+			cout << "Its been a pleasure serving you. Please, come again. " << endl << endl;
+			cout << "Bye bye now.. " << endl << endl;
+			cout << "I can't belive it, i'm loosing to a rug ;) <3 <3 " << endl << endl;
 			break;
 		}
 
-		Protein input_Protein = create_protein_database(*file).at(0);
+		Protein input_Protein = create_protein_database(*input_file).at(0);
 	}
 	return 0;
 }
