@@ -2,14 +2,27 @@
 #include <iostream>
 #include <sstream>
 #include <boost/optional.hpp>
-#include "primes.h"
-#include "lcs.h"
-#include "gcd.h"
+#include <gmp.h>
+
+#include <iostream>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgcodecs>
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
 #include "amino_acid_properties.h"
 #include "CSV.h"
 #include "Protein.h"
+#include "tests.h"
 
 using namespace std;
+using namespace cv;
 
 int g_count_proteins = 0;
 
@@ -17,72 +30,6 @@ string g_protein_database_file = "/home/itamar/Documents/AA/Files/database_itama
 
 bool g_EXIT_PROGRAM = false;
 
-void test_prime_factors(){
-	//	Finding the prime factors of a number
-
-	printf("Finding the prime factors of a number\n");
-
-	unsigned long int prime_product = 1;
-
-	unsigned long int six_primes[] = {100, 199, 355, 666, 786};
-	for (int i = 0; i < 5; ++i) {
-		prime_product *= prime_vector.at(six_primes[i]);
-		printf("Real prime factor is: %lu\n", prime_vector.at(six_primes[i]));
-	}
-
-	printf("The prime factors of %lu are:\n", prime_product);
-
-	primeFactors(prime_product);
-
-	int count = 0;
-	int power_base = 3;
-	unsigned long int power = 1;
-	unsigned long int last_power = 1;
-	while(power < prime_product){
-		count++;
-		last_power = power;
-		power *= power_base;
-	}
-	printf("\nNumber of powers of %d is: %d\n", power_base, count);
-	printf("%d power %d is %lu\n", power_base, count, last_power);
-	printf("%d power %d + 1 is %lu\n", power_base, count, power);
-}
-
-void test_gcd(){
-	//	running GCD non recursion method
-
-	printf("\nrunning GCD non recursion method\n");
-
-	size_t a,b,c;
-	a = 299792458;
-	b = 6447287;
-	c = 256964964;
-
-	printf("a=%lu, b=%lu, c=%lu\n", a,b,c);
-
-	printf("gcd(a,b) = gcd(%lu ,%lu) = %lu\n", a, b, gcd(a,b));
-}
-
-void test_lcs(){
-	//	running LCS Dynamic Programing
-
-	printf("\nrunning LCS Dynamic Programing\n");
-
-	char X[] = "AGGTAB";
-	char Y[] = "GXTXAYB";
-
-	size_t m = strlen(X);
-	size_t n = strlen(Y);
-
-	printf("Length of LCS is %lu\n", lcs( X, Y, m, n));
-}
-
-void test_all(){
-
-	test_prime_factors();
-	test_gcd();
-	test_lcs();
-}
 
 std::vector<Protein> create_protein_database(std::ifstream &file){
 	std::vector<Protein> proteins_vector;
@@ -161,6 +108,7 @@ std::vector<Protein> create_protein_database(std::ifstream &file){
 			}
 		}
 
+		new_Protein.init_logic();
 		proteins_vector.push_back(new_Protein);
 	}
 
@@ -211,6 +159,14 @@ int main() {
 
 	init_AA_properties_all();
 
+	Mat img;
+	img = imread("haus.jpg");
+
+	// create UI and show the image
+	namedWindow("HarrisCornerDetector", 1);
+
+	imshow("HarrisCornerDetector", img);
+
 	std::ifstream file;
 
 	try{
@@ -224,6 +180,28 @@ int main() {
 	}
 
 	std::vector<Protein> all_Proteins = create_protein_database(file);
+
+	unsigned long int max_phi_AA_all = 0;
+	unsigned long int max_psi_AA_all = 0;
+	Protein arg_max_phi;
+	Protein arg_max_psi;
+
+	for (std::vector<Protein>::iterator all_Proteins_it = all_Proteins.begin(); all_Proteins_it != all_Proteins.end(); ++all_Proteins_it){
+		if(max_phi_AA_all < all_Proteins_it->max_phi_AA){
+			max_phi_AA_all = all_Proteins_it->max_phi_AA;
+			arg_max_phi = *all_Proteins_it;
+		}
+
+		if(max_psi_AA_all < all_Proteins_it->max_psi_AA){
+			max_psi_AA_all = all_Proteins_it->max_psi_AA;
+			arg_max_psi = *all_Proteins_it;
+		}
+	}
+
+	printf("max_phi_AA_all is: %lu ", max_phi_AA_all);
+	cout << "for protein %s\n" << arg_max_phi.get_protein_ID() << endl << endl;
+	printf("max_psi_AA_all is: %lu ", max_psi_AA_all);
+	cout << "for protein %s\n" << arg_max_psi.get_protein_ID() << endl << endl;
 
 	file.close();
 

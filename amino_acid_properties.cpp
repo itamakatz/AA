@@ -42,7 +42,7 @@ void init_AA_frequency(){
 void set_AA_to_prime(){
 
 //	create a reversed map to sort the AA by frequency
-	std::map<double, AA_types> AA_frequency_reversed;
+	std::multimap<double, AA_types> AA_frequency_reversed;
 
 	for (std::map<AA_types, double>::iterator it = AA_frequency.begin(); it != AA_frequency.end(); ++it){
 		AA_frequency_reversed.insert(std::pair<double, AA_types>(it->second, it->first));

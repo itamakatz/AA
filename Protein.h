@@ -5,6 +5,9 @@
 #include <string>
 #include "AA.h"
 
+#define MIN_ANGLE_VAL -180
+#define MAX_ANGLE_VAL 180
+
 class Protein {
 private:
 
@@ -16,16 +19,27 @@ private:
 	int _from_last_disulfide_count = 0;
 	std::vector<std::pair<AA, int>> _disulfide_bridges;
 
-	std::vector<unsigned long int> phi_angles;
-	std::vector<unsigned long int> phi_AA;
-	std::vector<unsigned long int> psi_angles;
-	std::vector<unsigned long int> psi_AA;
+	std::map<int, unsigned long int> phi_angles;
+	std::map<int, unsigned long int> phi_AA;
+	std::map<int, std::vector<unsigned long int>> phi_AA_factors;
 
-	Protein(){}
+	std::map<int, unsigned long int> psi_angles;
+	std::map<int, unsigned long int> psi_AA;
+	std::map<int, std::vector<unsigned long int>> psi_AA_factors;
 
 public:
+
+	unsigned long int max_phi_AA = 0;
+	unsigned long int max_psi_AA = 0;
+
 	Protein(std::string protein_ID);
+	Protein(){}
+
 	void add_AA(AA new_AA);
+
+	void init_logic();
+
+	std::string get_protein_ID();
 };
 
 

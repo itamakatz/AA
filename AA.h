@@ -27,6 +27,10 @@ public:
 	bool contains_disulfide();
 
 	static bool check_AA_valid(const std::string &AA_str);
+
+	AA_types get_AA_type();
+	int get_phi();
+	int get_psi();
 };
 
 

@@ -35,3 +35,14 @@ bool AA::contains_disulfide() {
 	return _contains_disulfide;
 }
 
+AA_types AA::get_AA_type() {
+	return this->aa;
+}
+
+int AA::get_phi() {
+	return this->phi;
+}
+
+int AA::get_psi() {
+	return this->psi;
+}

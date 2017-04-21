@@ -7,7 +7,7 @@
 #include <string>
 
 enum AA_types {
-	A = 1,
+	A = 2,
 	R,
 	N,
 	D,
