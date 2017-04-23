@@ -4,17 +4,7 @@
 #include <boost/optional.hpp>
 #include <gmp.h>
 
-#include <iostream>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgcodecs>
-#include <opencv2/core.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 
 #include "amino_acid_properties.h"
 #include "CSV.h"
@@ -159,13 +149,14 @@ int main() {
 
 	init_AA_properties_all();
 
-	Mat img;
-	img = imread("haus.jpg");
-
-	// create UI and show the image
+	cv::Mat img;
+	img = imread("/home/itamar/Desktop/h475px-i.jpg");
+//
+//	// create UI and show the image
 	namedWindow("HarrisCornerDetector", 1);
-
+//
 	imshow("HarrisCornerDetector", img);
+	waitKey(0);
 
 	std::ifstream file;
 
